@@ -1,7 +1,7 @@
 import numpy as np
 import glob
 import cv2
-from os.path import join
+from os.path import join,exists
 
 
 def check_videos_open(video_list):
@@ -15,11 +15,19 @@ def release_videos(video_list):
     for cap in video_list:
         cap.release()
 
+def folder_check(path_list):
+    for path in path_list:
+        if not exists(path):
+            raise FileNotFoundError
 
 def images2video(image_path, video_path, fps):
+    if not exists(image_path):
+        raise FileNotFoundError
     img_array = []
     size = (1, 1)
     file_list = sorted(glob.glob(join(image_path, '*.jpg')),key=lambda x: int(x.split('\\')[-1].rstrip('.jpg')))
+    if len(file_list) is 0:
+        raise FileNotFoundError
     for filename in file_list:
         img = cv2.imread(filename)
         height, width, layers = img.shape
@@ -32,6 +40,7 @@ def images2video(image_path, video_path, fps):
 
 
 def horizontal_concat_videos(videos, output):
+    folder_check(videos)
     cap_list = []
     try:
         for video in videos:
@@ -67,6 +76,7 @@ def horizontal_concat_videos(videos, output):
 
 
 def vertical_concat_videos(videos, output):
+    folder_check(videos)
     cap_list = []
     try:
         for video in videos:

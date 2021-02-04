@@ -15,10 +15,16 @@ class line:
         z_distance = self.point_1.z - self.point_2.z
         return LA.norm([x_distance, y_distance, z_distance])
 
+    def vector(self):
+        x_diff = self.point_1.x - self.point_2.x
+        y_diff = self.point_1.y - self.point_2.y
+        z_diff = self.point_1.z - self.point_2.z
+        return x_diff,y_diff,z_diff
+
     def angle(self, target_line):  # return cos value
-        position1 = self.point_1.position()
-        position2 = self.point_2.position()
-        return np.dot(position1, position2) / (LA.norm(position1) * LA.norm(position2))
+        my_vector = self.vector()
+        target_vector = target_line.vector()
+        return np.dot(my_vector, target_vector) / (LA.norm(my_vector) * LA.norm(target_vector))
 
 
 class point:
@@ -31,12 +37,6 @@ class point:
 
     def position(self):
         return [self.x, self.y, self.z]
-
-    def distance(self, other):
-        x_distance = self.x - other.x
-        y_distance = self.y - other.y
-        z_distance = self.z - other.z
-        return LA.norm([x_distance, y_distance, z_distance])
 
     def projZ(self):
         return self.x, self.y
